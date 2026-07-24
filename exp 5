@@ -1,0 +1,28 @@
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Two sample documents
+doc1 = "Artificial Intelligence is transforming the world"
+doc2 = "Artificial Intelligence is changing the world"
+
+# Convert text into numerical vectors
+vectorizer = CountVectorizer()
+vectors = vectorizer.fit_transform([doc1, doc2])
+
+# Calculate cosine similarity
+similarity = cosine_similarity(vectors)
+
+print("Cosine Similarity Matrix:")
+print(similarity)
+
+print("\nSimilarity Score:")
+print(similarity[0][1])
+
+# Interpretation
+if similarity[0][1] > 0.8:
+    print("The two documents are highly similar.")
+elif similarity[0][1] > 0.5:
+    print("The two documents are moderately similar.")
+else:
+    print("The two documents are not very similar.")
+
