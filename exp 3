@@ -1,0 +1,30 @@
+import pandas as pd
+
+# Create a sample student dataset
+data = {
+    "Student": ["Arun", "Bala", "Charan", "Deepa", "Esha"],
+    "Marks": [85, None, 78, 92, None]
+}
+
+df = pd.DataFrame(data)
+
+print("Original Dataset:")
+print(df)
+
+# Check missing values
+print("\nMissing Values:")
+print(df.isnull())
+
+# Replace missing values with the mean
+df["Marks"] = df["Marks"].fillna(df["Marks"].mean())
+
+print("\nCleaned Dataset:")
+print(df)
+
+# Statistical Information
+average_marks = df["Marks"].mean()
+highest_score = df["Marks"].max()
+
+print("\nAverage Marks:", average_marks)
+print("Highest Score:", highest_score)
+
