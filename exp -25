@@ -1,0 +1,101 @@
+import os
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=input("Enter your OpenAI API key: ")
+)
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+# Folder containing documents
+folder = "documents"
+
+documents = []
+filenames = []
+
+# Read all TXT files
+for filename in os.listdir(folder):
+
+    if filename.endswith(".txt"):
+
+        filepath = os.path.join(folder, filename)
+
+        with open(filepath, "r", encoding="utf-8") as file:
+            text = file.read()
+
+        # Split into paragraphs
+        paragraphs = [
+            p.strip()
+            for p in text.split("\n")
+            if p.strip()
+        ]
+
+        for paragraph in paragraphs:
+            documents.append(paragraph)
+            filenames.append(filename)
+
+print("Documents loaded:", len(set(filenames)))
+print("Text sections:", len(documents))
+
+# Generate embeddings
+embeddings = model.encode(documents)
+
+while True:
+
+    question = input(
+        "\nAsk a question (type exit to stop): "
+    )
+
+    if question.lower() == "exit":
+        break
+
+    # Query embedding
+    query_embedding = model.encode([question])
+
+    # Similarity search
+    scores = cosine_similarity(
+        query_embedding,
+        embeddings
+    )[0]
+
+    # Top 3 results
+    top_indices = scores.argsort()[-3:][::-1]
+
+    context = ""
+
+    for index in top_indices:
+
+        context += (
+            f"\nSource: {filenames[index]}\n"
+            f"Content: {documents[index]}\n"
+        )
+
+    # Generate answer
+    prompt = f"""
+    You are a multi-document AI assistant.
+
+    Answer the question using the provided documents.
+
+    DOCUMENT CONTEXT:
+    {context}
+
+    QUESTION:
+    {question}
+
+    Instructions:
+    - Give a clear answer.
+    - Use only the provided information.
+    - Mention the source file when possible.
+    - If the answer is unavailable, say so.
+    """
+
+    response = client.responses.create(
+        model="gpt-5.6",
+        input=prompt
+    )
+
+    print("\nAI ASSISTANT")
+    print("=" * 50)
+    print(response.output_text)
