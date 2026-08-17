@@ -1,0 +1,87 @@
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=input("Enter your OpenAI API key: ")
+)
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+# Step 1: Document
+document = """
+Artificial Intelligence is a technology that enables machines
+to perform tasks that normally require human intelligence.
+
+Machine Learning is a subset of Artificial Intelligence.
+It allows computers to learn patterns from data.
+
+Deep Learning is a subset of Machine Learning.
+It uses neural networks with multiple layers.
+
+Natural Language Processing allows computers to understand
+and process human language.
+
+Computer Vision allows computers to understand images and videos.
+"""
+
+# Step 2: Chunking
+sentences = document.split("\n\n")
+
+chunks = []
+
+for sentence in sentences:
+    sentence = sentence.strip()
+
+    if sentence:
+        chunks.append(sentence)
+
+print("Number of chunks:", len(chunks))
+
+# Step 3: Embeddings
+chunk_embeddings = model.encode(chunks)
+
+# Step 4: User question
+question = input("\nEnter your question: ")
+
+question_embedding = model.encode([question])
+
+# Step 5: Retrieval
+scores = cosine_similarity(
+    question_embedding,
+    chunk_embeddings
+)[0]
+
+# Retrieve top 2 chunks
+top_indices = scores.argsort()[-2:][::-1]
+
+context = "\n".join(
+    chunks[i] for i in top_indices
+)
+
+print("\nRetrieved Context:")
+print(context)
+
+# Step 6: Generation
+prompt = f"""
+You are a document question-answering assistant.
+
+Use only the following context to answer the question.
+
+Context:
+{context}
+
+Question:
+{question}
+
+Answer clearly and briefly.
+"""
+
+response = client.responses.create(
+    model="gpt-5.6",
+    input=prompt
+)
+
+print("\nFINAL ANSWER")
+print("=" * 50)
+print(response.output_text)
