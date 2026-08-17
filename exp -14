@@ -1,0 +1,32 @@
+Professional Email Requesting Leave Due to Illness
+Zero-shot Prompt
+Prompt:
+Write a professional email requesting leave due to illness.
+Output:
+Subject: Leave Request Due to Illness
+Dear Sir/Madam,
+I am feeling unwell due to illness and request one day's leave. I will resume work once I recover. Thank you for your understanding.
+Yours sincerely,
+John
+One-shot Prompt
+Prompt:
+Example: Write a professional email requesting leave for a family function.
+Now write a professional email requesting leave due to illness.
+Output:
+Subject: Sick Leave Request
+Dear Sir/Madam,
+I am suffering from a fever and have been advised to rest. Kindly grant me leave for today. Thank you.
+Sincerely,
+John
+Few-shot Prompt
+Prompt:
+Example 1: Leave email for attending a wedding.
+Example 2: Leave email for attending an examination.
+Now write a professional email requesting leave due to illness.
+
+Output:
+Subject: Leave Application
+Dear Sir/Madam,
+Due to illness, I am unable to attend work today. Kindly approve my leave request. Thank you for your support.
+Regards,
+John
