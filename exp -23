@@ -1,0 +1,84 @@
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_chroma import Chroma
+from langchain_openai import ChatOpenAI
+
+api_key = input("Enter your OpenAI API key: ")
+
+# Embeddings
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+)
+
+# Knowledge base
+documents = [
+    "Artificial Intelligence is used to create intelligent systems.",
+    "Machine Learning is a subset of Artificial Intelligence.",
+    "Deep Learning uses neural networks.",
+    "Python is commonly used for Machine Learning.",
+    "TensorFlow and PyTorch are popular Deep Learning frameworks."
+]
+
+# Vector database
+vectorstore = Chroma.from_texts(
+    documents,
+    embedding=embeddings,
+    collection_name="ai_knowledge"
+)
+
+retriever = vectorstore.as_retriever(
+    search_kwargs={"k": 2}
+)
+
+# LLM
+llm = ChatOpenAI(
+    model="gpt-5.6",
+    api_key=api_key
+)
+
+# Conversation history
+chat_history = []
+
+print("\nAI CHATBOT")
+print("Type 'exit' to stop.")
+
+while True:
+
+    question = input("\nYou: ")
+
+    if question.lower() == "exit":
+        break
+
+    # Retrieve context
+    results = retriever.invoke(question)
+
+    context = "\n".join(
+        doc.page_content for doc in results
+    )
+
+    # Add previous conversation
+    history = "\n".join(chat_history)
+
+    prompt = f"""
+    You are a helpful AI assistant.
+
+    Previous conversation:
+    {history}
+
+    Relevant knowledge:
+    {context}
+
+    Current question:
+    {question}
+
+    Answer clearly and use the relevant knowledge.
+    """
+
+    response = llm.invoke(prompt)
+
+    answer = response.content
+
+    print("AI:", answer)
+
+    # Save conversation
+    chat_history.append("User: " + question)
+    chat_history.append("AI: " + answer)
