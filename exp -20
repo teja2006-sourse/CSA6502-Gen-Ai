@@ -1,0 +1,61 @@
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+from openai import OpenAI
+
+# OpenAI client
+client = OpenAI(
+    api_key=input("Enter your OpenAI API key: ")
+)
+
+# Embedding model
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+documents = [
+    "Artificial Intelligence enables machines to perform tasks that normally require human intelligence.",
+    "Machine Learning is a subset of Artificial Intelligence that learns patterns from data.",
+    "Deep Learning is a type of Machine Learning based on neural networks.",
+    "Natural Language Processing enables computers to understand and process human language.",
+    "Computer Vision enables computers to analyze images and videos."
+]
+
+# Create embeddings
+doc_embeddings = model.encode(documents)
+
+# User question
+question = input("\nAsk a question: ")
+
+# Query embedding
+query_embedding = model.encode([question])
+
+# Similarity calculation
+scores = cosine_similarity(
+    query_embedding,
+    doc_embeddings
+)[0]
+
+# Retrieve best document
+best_index = scores.argmax()
+
+context = documents[best_index]
+
+# Generate answer
+prompt = f"""
+Answer the question using only the provided context.
+
+Context:
+{context}
+
+Question:
+{question}
+
+Give a simple and accurate answer.
+"""
+
+response = client.responses.create(
+    model="gpt-5.6",
+    input=prompt
+)
+
+print("\nANSWER")
+print("=" * 50)
+print(response.output_text)
