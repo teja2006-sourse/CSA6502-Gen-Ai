@@ -1,0 +1,64 @@
+from openai import OpenAI
+
+client = OpenAI(api_key="YOUR_API_KEY")
+
+question = input("Enter a question for evaluation: ")
+
+prompts = {
+
+    "Direct Prompt":
+    f"""
+    Answer the following question:
+    {question}
+    """,
+
+    "Role Based Prompt":
+    f"""
+    You are an expert teacher.
+    Explain the answer clearly using simple language.
+
+    Question:
+    {question}
+    """,
+
+    "Structured Prompt":
+    f"""
+    Answer the following question.
+
+    Follow this structure:
+    1. Definition
+    2. Explanation
+    3. Example
+    4. Conclusion
+
+    Question:
+    {question}
+    """,
+
+    "Few Shot Prompt":
+    f"""
+    Answer questions clearly and concisely.
+
+    Example:
+    Question: What is AI?
+    Answer: AI is technology that enables computers to
+    perform tasks that normally require human intelligence.
+
+    Question:
+    {question}
+
+    Answer:
+    """
+}
+
+for name, prompt in prompts.items():
+
+    response = client.responses.create(
+        model="gpt-5.6",
+        input=prompt
+    )
+
+    print("\n================================")
+    print(name)
+    print("================================")
+    print(response.output_text)
