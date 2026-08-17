@@ -1,0 +1,39 @@
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+documents = [
+    "AI is used in healthcare for disease prediction.",
+    "AI helps banks detect fraudulent transactions.",
+    "Machine learning is used for recommendation systems.",
+    "Deep learning is useful for image recognition.",
+    "Natural language processing helps computers understand text."
+]
+
+# Create embeddings
+embeddings = model.encode(documents)
+
+query = input("Enter your search query: ")
+
+query_embedding = model.encode([query])
+
+# Calculate cosine similarity
+scores = cosine_similarity(
+    query_embedding,
+    embeddings
+)[0]
+
+# Sort documents by similarity
+results = sorted(
+    zip(documents, scores),
+    key=lambda x: x[1],
+    reverse=True
+)
+
+print("\nSEARCH RESULTS")
+print("=" * 50)
+
+for i, (document, score) in enumerate(results, start=1):
+    print(f"{i}. {document}")
+    print(f"   Similarity: {score:.4f}")
