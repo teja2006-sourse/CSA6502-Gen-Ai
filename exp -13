@@ -1,0 +1,21 @@
+Article Summarization
+Zero-shot Prompt
+Prompt:
+Summarize the following article in exactly 50 words.
+Output:
+Artificial Intelligence increases productivity by automating tasks, analyzing data, and improving decision-making. It helps organizations reduce costs, improve accuracy, and achieve better performance across different industries.
+One-shot Prompt
+Prompt:
+Example:
+Article: AI improves education through personalized learning.
+Summary: AI enhances education by providing personalized learning.
+Now summarize the following article in exactly 50 words.
+Output:
+Artificial Intelligence enhances efficiency by automating repetitive tasks, improving decision-making, and analyzing large amounts of data. It benefits industries through greater accuracy and productivity.
+Few-shot Prompt
+Prompt:
+Example 1: Climate change affects agriculture. → Summary.
+Example 2: Online education is becoming popular. → Summary.
+Now summarize the following article in exactly 50 words.
+Output:
+AI supports organizations by automating work, analyzing information, and improving efficiency. It reduces errors, saves time, and helps achieve better business and industrial performance.
