@@ -1,0 +1,16 @@
+from openai import OpenAI
+
+api_key = input("Enter your OpenAI API key: ")
+
+client = OpenAI(api_key=api_key)
+
+user_input = input("Enter your question: ")
+
+response = client.responses.create(
+    model="gpt-5.6",
+    input=user_input
+)
+
+print("\nAI RESPONSE")
+print("====================")
+print(response.output_text)
