@@ -1,0 +1,60 @@
+from openai import OpenAI
+
+client = OpenAI(api_key="YOUR_API_KEY")
+
+user_input = input("Enter a topic to classify: ")
+
+# Zero-shot Prompt
+zero_shot = f"""
+Classify the following text as Positive, Negative, or Neutral.
+
+Text: {user_input}
+"""
+
+# One-shot Prompt
+one_shot = f"""
+Classify the text as Positive, Negative, or Neutral.
+
+Example:
+Text: I love this product.
+Answer: Positive
+
+Text: {user_input}
+Answer:
+"""
+
+# Few-shot Prompt
+few_shot = f"""
+Classify the text as Positive, Negative, or Neutral.
+
+Examples:
+Text: I love this product.
+Answer: Positive
+
+Text: This product is terrible.
+Answer: Negative
+
+Text: The product arrived yesterday.
+Answer: Neutral
+
+Text: {user_input}
+Answer:
+"""
+
+prompts = {
+    "Zero-shot": zero_shot,
+    "One-shot": one_shot,
+    "Few-shot": few_shot
+}
+
+for name, prompt in prompts.items():
+
+    response = client.responses.create(
+        model="gpt-5.6",
+        input=prompt
+    )
+
+    print("\n-----------------------------")
+    print(name)
+    print("-----------------------------")
+    print(response.output_text)
