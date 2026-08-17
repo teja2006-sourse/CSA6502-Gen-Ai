@@ -1,0 +1,71 @@
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_chroma import Chroma
+from langchain_openai import ChatOpenAI
+
+# API Key
+api_key = input("Enter your OpenAI API key: ")
+
+# Embedding model
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+)
+
+# Domain documents
+documents = [
+    "Students must maintain at least 75 percent attendance.",
+    "The college library is open from 8 AM to 8 PM.",
+    "Students can apply for leave through the college portal.",
+    "Internal examinations are conducted twice every semester.",
+    "Students must carry their identity card on campus.",
+    "The computer laboratory is open from 9 AM to 6 PM."
+]
+
+# Create vector database
+vectorstore = Chroma.from_texts(
+    documents,
+    embedding=embeddings,
+    collection_name="college_knowledge"
+)
+
+# Retriever
+retriever = vectorstore.as_retriever(
+    search_kwargs={"k": 3}
+)
+
+# LLM
+llm = ChatOpenAI(
+    model="gpt-5.6",
+    api_key=api_key
+)
+
+# User question
+question = input("\nAsk your college-related question: ")
+
+# Retrieve documents
+results = retriever.invoke(question)
+
+context = "\n".join(
+    document.page_content
+    for document in results
+)
+
+prompt = f"""
+You are a college information chatbot.
+
+Use the following information to answer the question.
+
+Information:
+{context}
+
+Question:
+{question}
+
+If the information is not available, say:
+"Information not available in the knowledge base."
+"""
+
+answer = llm.invoke(prompt)
+
+print("\nCHATBOT ANSWER")
+print("=" * 50)
+print(answer.content)
