@@ -1,0 +1,46 @@
+import faiss
+import numpy as np
+from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+documents = [
+    "Artificial Intelligence is a branch of computer science.",
+    "Machine Learning learns patterns from data.",
+    "Deep Learning uses artificial neural networks.",
+    "Natural Language Processing works with human language.",
+    "Computer Vision allows computers to understand images."
+]
+
+# Generate embeddings
+embeddings = model.encode(documents)
+
+# Convert to NumPy
+embeddings = np.array(embeddings).astype("float32")
+
+# Create FAISS index
+dimension = embeddings.shape[1]
+
+index = faiss.IndexFlatL2(dimension)
+
+# Add embeddings
+index.add(embeddings)
+
+print("Number of documents stored:", index.ntotal)
+
+# User query
+query = input("\nEnter your search query: ")
+
+query_embedding = model.encode([query])
+query_embedding = np.array(query_embedding).astype("float32")
+
+# Search top 3
+distances, indices = index.search(query_embedding, 3)
+
+print("\nTOP RESULTS")
+print("=" * 50)
+
+for i in range(3):
+    print(f"\nRank {i + 1}")
+    print("Document:", documents[indices[0][i]])
+    print("Distance:", distances[0][i])
