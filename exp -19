@@ -1,0 +1,50 @@
+import chromadb
+from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+# Create Chroma client
+client = chromadb.Client()
+
+# Create collection
+collection = client.get_or_create_collection(
+    name="student_documents"
+)
+
+documents = [
+    "Artificial Intelligence is used in healthcare.",
+    "Machine Learning is used for prediction.",
+    "Deep Learning uses neural networks.",
+    "Python is widely used in Artificial Intelligence.",
+    "SQL is used to manage relational databases.",
+    "Computer Vision processes images and videos."
+]
+
+# Generate embeddings
+embeddings = model.encode(documents).tolist()
+
+# Store documents
+collection.add(
+    documents=documents,
+    embeddings=embeddings,
+    ids=[str(i) for i in range(len(documents))]
+)
+
+print("Documents stored successfully.")
+
+# User query
+query = input("\nEnter your query: ")
+
+query_embedding = model.encode([query]).tolist()
+
+# Retrieve top 3
+results = collection.query(
+    query_embeddings=query_embedding,
+    n_results=3
+)
+
+print("\nTOP 3 RETRIEVED DOCUMENTS")
+print("=" * 50)
+
+for i, document in enumerate(results["documents"][0], start=1):
+    print(f"{i}. {document}")
