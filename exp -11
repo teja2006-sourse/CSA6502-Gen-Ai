@@ -1,0 +1,26 @@
+Product Description for a Smart Fitness Watch
+Zero-shot Prompt
+Prompt:
+Write a professional product description for a Smart Fitness Watch. Include its features, benefits, and target users.
+Output:
+Stay active and connected with the Smart Fitness Watch. It features heart rate monitoring, sleep tracking, GPS, calorie tracking, and smartphone notifications. With its stylish design, water resistance, and long battery life, it is perfect for fitness enthusiasts, students, and professionals.
+One-shot Prompt
+Prompt:
+Example:
+Product: Wireless Earbuds
+Description: Wireless earbuds with Bluetooth connectivity, premium sound quality, and long battery life.
+Now write a similar product description for a Smart Fitness Watch.
+Output:
+The Smart Fitness Watch helps you monitor your health with heart rate tracking, sleep monitoring, and fitness modes. It also provides GPS, call notifications, and a long-lasting battery, making it ideal for everyday use.
+Few-shot Prompt
+Prompt:
+Example 1:
+Product: Wireless Earbuds
+Description: Bluetooth earbuds with premium sound quality.
+Example 2:
+Product: Smart Speaker
+Description: Voice-controlled speaker with excellent sound quality.
+Now write a product description for a Smart Fitness Watch.
+Output:
+The Smart Fitness Watch is a lightweight wearable that tracks steps, calories, heart rate, and sleep. It also supports GPS, smartphone notifications, and multiple sports modes, making it a reliable companion for a healthy lifestyle.
+
