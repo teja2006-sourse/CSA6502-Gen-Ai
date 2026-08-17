@@ -1,0 +1,27 @@
+from openai import OpenAI
+
+client = OpenAI(api_key="YOUR_API_KEY")
+
+problem = input("Enter a Python programming problem: ")
+
+prompt = f"""
+Generate valid Python code for the following problem.
+
+Requirements:
+1. Provide only Python code.
+2. Use meaningful variable names.
+3. Include comments.
+4. The code should be executable.
+
+Problem:
+{problem}
+"""
+
+response = client.responses.create(
+    model="gpt-5.6",
+    input=prompt
+)
+
+print("\nGENERATED PYTHON CODE")
+print("==========================")
+print(response.output_text)
