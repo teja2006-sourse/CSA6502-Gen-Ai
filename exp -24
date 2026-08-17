@@ -1,0 +1,69 @@
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=input("Enter your OpenAI API key: ")
+)
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+# Load external document
+with open("company_policy.txt", "r", encoding="utf-8") as file:
+    text = file.read()
+
+# Split document
+documents = [
+    line.strip()
+    for line in text.split("\n")
+    if line.strip()
+]
+
+# Create embeddings
+embeddings = model.encode(documents)
+
+print("\nDocument loaded successfully.")
+
+while True:
+
+    question = input("\nAsk a question (type exit to stop): ")
+
+    if question.lower() == "exit":
+        break
+
+    query_embedding = model.encode([question])
+
+    scores = cosine_similarity(
+        query_embedding,
+        embeddings
+    )[0]
+
+    # Top 3 documents
+    top_indices = scores.argsort()[-3:][::-1]
+
+    context = "\n".join(
+        documents[i]
+        for i in top_indices
+    )
+
+    prompt = f"""
+    You are a company policy assistant.
+
+    Answer using only the following document information.
+
+    Context:
+    {context}
+
+    Question:
+    {question}
+
+    If the answer is not present, say:
+    "The information is not available in the document."
+    """
+
+    response = client.responses.create(
+        model="gpt-5.6",
+        input=prompt
+    )
+
+    print("\nAI:", response.output_text)
