@@ -1,0 +1,22 @@
+Blog on "Applications of Artificial Intelligence in Healthcare"
+Zero-shot Prompt
+Prompt:
+Write a 200-word blog on "Applications of Artificial Intelligence in Healthcare."
+Output:
+Artificial Intelligence (AI) is transforming healthcare by improving diagnosis, treatment, and patient care. AI helps doctors detect diseases early, analyze medical images, monitor patients remotely, and recommend personalized treatments. It also supports medical research, reduces errors, and improves hospital management, making healthcare more efficient and accessible.
+One-shot Prompt
+Prompt:
+Example: Write a 200-word blog on "Applications of Artificial Intelligence in Education."
+Now write a similar 200-word blog on "Applications of Artificial Intelligence in Healthcare."
+Output:
+AI is playing an important role in modern healthcare. It helps doctors analyze medical data, detect diseases, assist in surgeries, and monitor patients. AI also improves hospital management and supports medical research, resulting in better healthcare services.
+
+
+Few-shot Prompt
+Prompt:
+Example 1: Write a blog on AI in Education.
+Example 2: Write a blog on AI in Agriculture.
+Now write a blog on "Applications of Artificial Intelligence in Healthcare."
+Output:
+Artificial Intelligence improves healthcare by helping doctors diagnose diseases, monitor patients, and provide personalized treatment. It reduces medical errors, saves time, and supports research, making healthcare more reliable and efficient.
+
